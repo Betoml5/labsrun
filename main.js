@@ -1,10 +1,21 @@
+import { IMAGES, QUESTIONS_LEVEL_ONE } from "./consts";
+import GameAction from "./actions";
 import "./style.css";
 import Phaser from "phaser";
+
+//Game objects
+
+var player;
+var cursors;
+var gameOver = false;
+var door;
+var level = 1;
+var lifes = 5;
 
 var config = {
   type: Phaser.AUTO,
   width: 800,
-  height: 600,
+  height: 625,
   physics: {
     default: "arcade",
     arcade: {
@@ -18,17 +29,17 @@ var config = {
     update: update,
   },
 };
-var platforms;
-var player;
-var cursors;
-var gameOver = false;
 
 function preload() {
-  //Aqui se cargan los assets
-  this.load.image("sky", "assets/sky.png");
-  this.load.image("ground", "assets/platform.png");
-  // this.load.image('star', 'assets/star.png');
-  // this.load.image('bomb', 'assets/bomb.png');
+  IMAGES.forEach((image) => {
+    this.load.image(image.name, image.path);
+  });
+
+  // //Aqui se cargan los assets
+  // this.load.image("sky", "assets/bg-level1.png");
+  // this.load.image("ground", "assets/platform.png");
+  // // this.load.image('star', 'assets/star.png');
+  // // this.load.image('bomb', 'assets/bomb.png');
   this.load.spritesheet("dude", "assets/dude.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -40,14 +51,11 @@ function create() {
 
   player = this.physics.add.sprite(100, 450, "dude");
   //remove gravity
-  platforms = this.physics.add.staticGroup();
+  door = this.physics.add.staticGroup(); // Agrega la puerta como objeto estático
 
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
+  door.create(610, 75, "door");
 
-  //  Now let's create some ledges
-  platforms.create(600, 400, "ground");
-  platforms.create(50, 250, "ground");
-  platforms.create(750, 220, "ground");
+  // platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
@@ -86,7 +94,11 @@ function create() {
     frameRate: 10,
     repeat: -1,
   });
-  this.physics.add.collider(player, platforms);
+
+  // this.physics.add.overlap(player, door, collisionWithNextLevel, null, this);
+
+  this.physics.add.collider(player, door, collisionWithDoor);
+
   cursors = this.input.keyboard.createCursorKeys();
 }
 
@@ -117,5 +129,53 @@ function update() {
     player.setVelocityY(0);
   }
 }
+
+function displayQuestion(question) {
+  const html = `
+    <div class='questionContainer'>
+        <h2>Nivel ${level}</h2>
+        <p>Responde la siguiente pregunta</p>
+
+        <label name='question'>
+          ${question}
+        </label>
+        <input id='answer' type='text' placeholder='introduce tu respuesta' />
+        <button id='btnSubmitAnswer'>Enviar</button>
+    </div>
+  `;
+
+  const modal = document.querySelector("#modal");
+  modal.innerHTML = html;
+}
+
+const generateQuestion = () => {
+  let question;
+  switch (level) {
+    case level === 1:
+      //get a random question
+      console.log("HERE!");
+      return QUESTIONS_LEVEL_ONE[0];
+
+    case level === 2:
+      //get a random question
+      question =
+        QUESTIONS_LEVEL_ONE[Math.random() * QUESTIONS_LEVEL_ONE.length];
+      return question;
+
+    default:
+      break;
+  }
+};
+
+function collisionWithDoor() {
+  // this.physics.
+  const question = generateQuestion();
+  console.log(question);
+  // displayQuestion(question);
+  const btnSubmitAnswer = document.querySelector("#btnSubmitAnswer");
+  const answer = document.querySelector("#answer");
+}
+
+const validateAnswer = (answer) => {};
 
 const game = new Phaser.Game(config);
