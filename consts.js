@@ -15,6 +15,7 @@ export const IMAGES = [
 
 export const QUESTIONS_LEVEL_ONE = [
   {
+    id: 1,
     question: "¿Cuál es la capital de Colombia?",
     options: [
       {
@@ -32,6 +33,7 @@ export const QUESTIONS_LEVEL_ONE = [
     ],
   },
   {
+    id: 2,
     question: "¿Cuál es la capital de Argentina?",
     options: [
       {
@@ -44,6 +46,42 @@ export const QUESTIONS_LEVEL_ONE = [
       },
       {
         text: "Rosario",
+        correct: false,
+      },
+    ],
+  },
+  {
+    id: 3,
+    question: "¿Cuál es la capital de Brasil?",
+    options: [
+      {
+        text: "Brasilia",
+        correct: true,
+      },
+      {
+        text: "Sao Paulo",
+        correct: false,
+      },
+      {
+        text: "Rio de Janeiro",
+        correct: false,
+      },
+    ],
+  },
+  {
+    id: 4,
+    question: "¿Cuál es la capital de Chile?",
+    options: [
+      {
+        text: "Santiago",
+        correct: true,
+      },
+      {
+        text: "Valparaíso",
+        correct: false,
+      },
+      {
+        text: "Concepción",
         correct: false,
       },
     ],

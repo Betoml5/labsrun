@@ -1,5 +1,5 @@
 import { IMAGES, QUESTIONS_LEVEL_ONE } from "./consts";
-import GameAction from "./actions";
+import { displayQuestion } from "./actions";
 import "./style.css";
 import Phaser from "phaser";
 
@@ -10,8 +10,9 @@ var cursors;
 var gameOver = false;
 var door;
 var level = 1;
-var lifes = 5;
-
+var lifes = 2;
+var questionNumber = 1;
+var question;
 var config = {
   type: Phaser.AUTO,
   width: 800,
@@ -97,7 +98,16 @@ function create() {
 
   // this.physics.add.overlap(player, door, collisionWithNextLevel, null, this);
 
-  this.physics.add.collider(player, door, collisionWithDoor);
+  this.physics.add.collider(
+    player,
+    door,
+    function () {
+      collisionWithDoor();
+      this.scene.pause();
+    },
+    null,
+    this
+  );
 
   cursors = this.input.keyboard.createCursorKeys();
 }
@@ -130,52 +140,52 @@ function update() {
   }
 }
 
-function displayQuestion(question) {
-  const html = `
-    <div class='questionContainer'>
-        <h2>Nivel ${level}</h2>
-        <p>Responde la siguiente pregunta</p>
-
-        <label name='question'>
-          ${question}
-        </label>
-        <input id='answer' type='text' placeholder='introduce tu respuesta' />
-        <button id='btnSubmitAnswer'>Enviar</button>
-    </div>
-  `;
-
-  const modal = document.querySelector("#modal");
-  modal.innerHTML = html;
-}
-
 const generateQuestion = () => {
   let question;
-  switch (level) {
-    case level === 1:
-      //get a random question
-      console.log("HERE!");
-      return QUESTIONS_LEVEL_ONE[0];
 
-    case level === 2:
-      //get a random question
-      question =
-        QUESTIONS_LEVEL_ONE[Math.random() * QUESTIONS_LEVEL_ONE.length];
-      return question;
-
-    default:
-      break;
+  if (level === 1) {
+    question =
+      QUESTIONS_LEVEL_ONE[
+        Math.floor(Math.random() * QUESTIONS_LEVEL_ONE.length)
+      ];
   }
-};
 
-function collisionWithDoor() {
-  // this.physics.
-  const question = generateQuestion();
-  console.log(question);
-  // displayQuestion(question);
-  const btnSubmitAnswer = document.querySelector("#btnSubmitAnswer");
-  const answer = document.querySelector("#answer");
+  return question;
+};
+function validateAnswer() {
+  const answer = document.getElementsByName("answer");
+  const { value } = Array.from(answer).find((item) => item.checked);
+  const correctAnswer = question.options.find((option) => option.correct);
+
+  if (!value.trim() || value.trim() === "") {
+    alert("Debes introducir una respuesta");
+    return;
+  }
+
+  if (value.toLowerCase() === correctAnswer.text.toLowerCase()) {
+    alert("Respuesta correcta");
+    questionNumber++;
+
+    question = generateQuestion();
+
+    displayQuestion(question.question, question.options, level, questionNumber);
+    const btnSubmitAnswer = document.querySelector("#btnSubmitAnswer");
+    btnSubmitAnswer.addEventListener("click", validateAnswer);
+  } else {
+    alert("Respuesta incorrecta");
+    lifes--;
+    if (lifes === 0) {
+      alert("Game over");
+      gameOver = true;
+    }
+  }
 }
 
-const validateAnswer = (answer) => {};
+function collisionWithDoor() {
+  question = generateQuestion();
+  displayQuestion(question.question, question.options, level, questionNumber);
+  const btnSubmitAnswer = document.querySelector("#btnSubmitAnswer");
+  btnSubmitAnswer.addEventListener("click", validateAnswer);
+}
 
 const game = new Phaser.Game(config);

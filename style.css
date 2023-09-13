@@ -51,6 +51,21 @@
   color: #fff;
 }
 
+.questionContainer__options {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.questionContainer__option-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.questionContainer__option-wrap input[type="radio"] {
+  margin-right: 10px;
+}
+
 #modal {
   position: absolute;
   padding: 20px;
