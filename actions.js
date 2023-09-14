@@ -1,3 +1,5 @@
+import { QUESTIONS_LEVEL_ONE } from "./consts";
+
 export const displayQuestion = (question, options, level, questionNumber) => {
   const html = `
   <div class='questionContainer'>
@@ -27,4 +29,17 @@ export const displayQuestion = (question, options, level, questionNumber) => {
 
   const modal = document.querySelector("#modal");
   modal.innerHTML = html;
+};
+
+export const generateQuestion = (level) => {
+  let question;
+
+  if (level === 1) {
+    question =
+      QUESTIONS_LEVEL_ONE[
+        Math.floor(Math.random() * QUESTIONS_LEVEL_ONE.length)
+      ];
+  }
+
+  return question;
 };
