@@ -14,6 +14,7 @@ var lifes = 2;
 var lifesText;
 var questionNumber = 1;
 var question;
+var item;
 
 var config = {
   type: Phaser.AUTO,
@@ -43,26 +44,29 @@ function preload() {
   // this.load.image("ground", "assets/platform.png");
   // // this.load.image('star', 'assets/star.png');
   // // this.load.image('bomb', 'assets/bomb.png');
-  this.load.spritesheet("player", "assets/player.jpg", {
+  this.load.spritesheet("player", "assets/player.png", {
     frameWidth: 64,
-    frameHeight: 92,
+    frameHeight: 96,
   });
 }
 
 function create() {
   this.add.image(400, 300, "sky");
 
+  //Donde aparece el personaje
   player = this.physics.add.sprite(100, 450, "player");
   //remove gravity
   door = this.physics.add.staticGroup(); // Agrega la puerta como objeto estático
-
+  key = this.physics.add.staticGroup(); // Agrega la llave como objeto estático
+  //Donde se crea la puerta [la posicion]
+  key.create(100, 75, "key");
   door.create(610, 75, "door");
 
   // platforms.create(400, 568, "ground").setScale(2).refreshBody();
 
   player.setBounce(0);
   player.setCollideWorldBounds(true);
-
+  //  Our player animations, turning, walking left and walking right.
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("player", { start: 0, end: 3 }),
@@ -78,22 +82,7 @@ function create() {
 
   this.anims.create({
     key: "right",
-    frames: this.anims.generateFrameNumbers("player", { start: 4, end: 7 }),
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  // ir hacia arriba
-  this.anims.create({
-    key: "up",
     frames: this.anims.generateFrameNumbers("player", { start: 5, end: 8 }),
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  this.anims.create({
-    key: "down",
-    frames: this.anims.generateFrameNumbers("player", { start: 13, end: 16 }),
     frameRate: 10,
     repeat: -1,
   });
@@ -181,8 +170,17 @@ function validateAnswer() {
 function collisionWithDoor() {
   question = generateQuestion(level);
   displayQuestion(question.question, question.options, level, questionNumber);
-  const btnSubmitAnswer = document.querySelector("#btnSubmitAnswer");
-  btnSubmitAnswer.addEventListener("click", validateAnswer);
 }
+
+const levelOneActions = {
+  collisionWithKey: function () {
+    alert("Has encontrado la llave");
+  },
+  collisionWithDoor: function () {
+    alert("Has encontrado la puerta");
+  },
+};
+
+const levelTwoActions = {};
 
 const game = new Phaser.Game(config);
