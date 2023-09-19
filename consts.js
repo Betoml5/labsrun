@@ -11,6 +11,14 @@ export const IMAGES = [
     name: "door",
     path: "assets/door.png",
   },
+  {
+    name: "key",
+    path: "assets/key.png",
+  },
+  {
+    name: "bg-level2",
+    path: "assets/bg-level2.png",
+  },
 ];
 
 export const QUESTIONS_LEVEL_ONE = [
