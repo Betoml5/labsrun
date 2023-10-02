@@ -1,4 +1,4 @@
-export const IMAGES = [
+export const LEVEL_ONE_IMAGES = [
   {
     name: "sky",
     path: "assets/bg-level1.png",
@@ -16,8 +16,39 @@ export const IMAGES = [
     path: "assets/key.png",
   },
   {
+    name: "sillon",
+    path: "assets/sillon.png",
+  },
+  {
+    name: "boteBasura",
+    path: "assets/boteBasura.png",
+  },
+  {
+    name: "sillaIzquierda",
+    path: "assets/sillaIzquierda.png",
+  },
+  {
+    name: "sillaDerecha",
+    path: "assets/sillaDerecha.png",
+  },
+];
+
+export const LEVEL_TWO_IMAGES = [
+  {
     name: "bg-level2",
     path: "assets/bg-level2.png",
+  },
+  {
+    name: "door",
+    path: "assets/door.png",
+  },
+  {
+    name: "phone",
+    path: "assets/phone.png",
+  },
+  {
+    name: "book",
+    path: "assets/book.png",
   },
 ];
 
