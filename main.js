@@ -10,7 +10,6 @@ var cursors;
 var gameOver = false;
 var door;
 var key;
-var book;
 class LevelOne extends Phaser.Scene {
   constructor() {
     super("levelOne");
@@ -24,6 +23,7 @@ class LevelOne extends Phaser.Scene {
   boteBasura;
   sillaIzquierda;
   sillaDerecha;
+  cofre;
 
   getKeyFound() {
     return this.keyFound;
@@ -46,10 +46,13 @@ class LevelOne extends Phaser.Scene {
     this.scene.start("levelTwo");
   }
 
-  collisionWithKey(player, element) {
+  collisionWithChest(player, element) {
+    if (this.getKeyFound()) {
+      return;
+    }
+    element.setTexture("cofreAbierto");
     alert("Has encontrado la llave");
     this.setKeyFound(true);
-    element.destroy();
   }
 
   preload() {
@@ -66,7 +69,7 @@ class LevelOne extends Phaser.Scene {
     this.add.image(400, 300, "sky");
 
     //Donde aparece el personaje
-    player = this.physics.add.sprite(600, 450, "player");
+    player = this.physics.add.sprite(600, 350, "player");
     //remove gravity
     door = this.physics.add.staticGroup(); // Agrega la puerta como objeto estático
     key = this.physics.add.staticGroup(); // Agrega la llave como objeto estático
@@ -74,13 +77,15 @@ class LevelOne extends Phaser.Scene {
     this.boteBasura = this.physics.add.staticGroup();
     this.sillaIzquierda = this.physics.add.staticGroup();
     this.sillaDerecha = this.physics.add.staticGroup();
+    this.cofre = this.physics.add.staticGroup();
     //Donde se crea la puerta [la posicion]
-    key.create(60, 150, "key");
+    key.create(700, 530, "key");
     door.create(610, 75, "door");
     this.sillon.create(355, 290, "sillon");
-    this.boteBasura.create(100, 530, "boteBasura");
+    this.boteBasura.create(100, 560, "boteBasura");
     this.sillaIzquierda.create(200, 370, "sillaIzquierda");
     this.sillaDerecha.create(500, 370, "sillaDerecha");
+    this.cofre.create(700, 530, "cofreCerrado");
 
     // platforms.create(400, 568, "ground").setScale(2).refreshBody();
     this.physics.world.setBounds(0, 0, 800, 600); // Reemplaza 'width' y 'height' con los valores adecuados
@@ -125,7 +130,6 @@ class LevelOne extends Phaser.Scene {
     this.physics.add.collider(player, door, this.collisionWithDoor, null, this);
     this.physics.add.collider(player, key, this.collisionWithKey, null, this);
     this.physics.add.collider(player, this.sillon, () => {}, null, this);
-    this.physics.add.collider(player, this.boteBasua, () => {}, null, this);
     this.physics.add.collider(
       player,
       this.sillaIzquierda,
@@ -135,6 +139,13 @@ class LevelOne extends Phaser.Scene {
     );
     this.physics.add.collider(player, this.sillaDerecha, () => {}, null, this);
     this.physics.add.collider(player, this.boteBasura, () => {}, null, this);
+    this.physics.add.collider(
+      player,
+      this.cofre,
+      this.collisionWithChest,
+      null,
+      this
+    );
 
     cursors = this.input.keyboard.createCursorKeys();
   }

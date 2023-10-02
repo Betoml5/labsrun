@@ -31,6 +31,14 @@ export const LEVEL_ONE_IMAGES = [
     name: "sillaDerecha",
     path: "assets/sillaDerecha.png",
   },
+  {
+    name: "cofreAbierto",
+    path: "assets/cofreAbierto.png",
+  },
+  {
+    name: "cofreCerrado",
+    path: "assets/cofreCerrado.png",
+  },
 ];
 
 export const LEVEL_TWO_IMAGES = [
