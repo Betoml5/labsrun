@@ -36,13 +36,11 @@ class LevelOne extends Phaser.Scene {
   collisionWithDoor(player, element) {
     if (!this.getKeyFound()) {
       this.game.pause();
-      alert("¡Encuentra la llave para poder continuar!");
-      setTimeout(() => {
-        this.game.resume();
-      }, 1000);
+      displayModal("¡Ups!", "¡Encuentra la llave para poder continuar!");
+      setTimeout(() => this.game.resume(), 1000);
       return;
     }
-    alert("¡Excelente! Has encontrado la puerte y tienes la llave");
+    displayModal("¡Excelente!", "¡Has encontrado la puerta!");
     this.scene.start("levelTwo");
   }
 
@@ -51,7 +49,7 @@ class LevelOne extends Phaser.Scene {
       return;
     }
     element.setTexture("cofreAbierto");
-    alert("Has encontrado la llave");
+    displayModal("¡Encontrado!", "¡Has encontrado la llave!");
     this.setKeyFound(true);
   }
 
@@ -63,10 +61,15 @@ class LevelOne extends Phaser.Scene {
       frameWidth: 107,
       frameHeight: 96,
     });
+    this.load.audio("song", "/assets/song.mp3");
   }
 
   create() {
     this.add.image(400, 300, "sky");
+
+    const song = this.sound.add("song");
+    song.play();
+    song.setVolume(0.5);
 
     //Donde aparece el personaje
     player = this.physics.add.sprite(600, 350, "player");
@@ -197,6 +200,7 @@ class LevelTwo extends Phaser.Scene {
   book;
   phone;
   door;
+  closet;
   bookFound = false;
   phoneFound = false;
 
@@ -223,13 +227,13 @@ class LevelTwo extends Phaser.Scene {
   collisionWithPhone(player, element) {
     this.setPhoneFound(true);
     if (!this.getBookFound()) {
-      alert("¡Encuentra el libro para poder avanzar!");
+      displayModal("¡Ups!", "¡Encuentra el libro para poder avanzar!");
       element.destroy();
       return;
     }
 
     if (this.getBookFound() && this.getPhoneFound()) {
-      alert("¡Encontraste el celular, avanza al siguiente nivel!");
+      displayModal("¡Encontrado!", "¡Encontraste el celular!");
       element.destroy();
       return;
     }
@@ -238,13 +242,13 @@ class LevelTwo extends Phaser.Scene {
   collisionWithBook(player, element) {
     this.setBookFound(true);
     if (!this.getPhoneFound()) {
-      alert("¡Encuentra el celular para poder avanzar!");
+      displayModal("¡Ups!", "¡Encuentra el celular para poder avanzar!");
       element.destroy();
       return;
     }
 
     if (this.getBookFound() && this.getPhoneFound()) {
-      alert("¡Encontraste el libro, avanza al siguiente nivel!");
+      displayModal("¡Encontrado!", "¡Encontraste el libro!");
       element.destroy();
       return;
     }
@@ -252,12 +256,13 @@ class LevelTwo extends Phaser.Scene {
 
   collisionWithDoor(player, element) {
     if (!this.getBookFound() || !this.getPhoneFound()) {
-      alert("¡Encuentra los objetos para poder ver avanzar!");
+      displayModal("¡Ups!", "¡Encuentra los objetos para poder avanzar!");
       return;
     }
 
-    alert(
-      "¡Excelente! Has encontrado la puerta y tienes los objetos para avanzar"
+    displayModal(
+      "¡Excelente!",
+      "¡Has encontrado la puerta y tienes los objetos para avanzar!"
     );
   }
 
@@ -270,10 +275,15 @@ class LevelTwo extends Phaser.Scene {
       frameWidth: 124,
       frameHeight: 96,
     });
+    this.load.audio("song", "/assets/song.mp3");
   }
 
   create() {
     this.add.image(400, 300, "bg-level2");
+
+    const song = this.sound.add("song");
+    song.play();
+    song.setVolume(0.5);
 
     //Donde aparece el personaje
     player = this.physics.add.sprite(100, 450, "player");
@@ -281,10 +291,12 @@ class LevelTwo extends Phaser.Scene {
     this.door = this.physics.add.staticGroup(); // Agrega la puerta como objeto estático
     this.book = this.physics.add.staticGroup();
     this.phone = this.physics.add.staticGroup();
+    this.closet = this.physics.add.staticGroup();
     //Donde se crea la puerta [la posicion]
-    this.door.create(610, 75, "door");
+    this.door.create(110, 70, "door");
     this.book.create(360, 185, "book");
     this.phone.create(700, 400, "phone");
+    this.closet.create(55, 300, "ropero");
 
     // platforms.create(400, 568, "ground").setScale(2).refreshBody();
     this.physics.world.setBounds(0, 0, 800, 600); // Reemplaza 'width' y 'height' con los valores adecuados
@@ -294,34 +306,34 @@ class LevelTwo extends Phaser.Scene {
     //  Our player animations, turning, walking left and walking right.
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 1 }),
-      frameRate: 5,
+      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 5 }),
+      frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: "turn",
-      frames: [{ key: "player", frame: 3 }],
+      frames: [{ key: "player", frame: 0 }],
       frameRate: 20,
     });
 
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("player", { start: 8, end: 12 }),
+      frames: this.anims.generateFrameNumbers("player", { start: 8, end: 13 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: "up",
-      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 1 }),
+      frames: this.anims.generateFrameNumbers("player", { start: 1, end: 2 }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.anims.create({
       key: "down",
-      frames: this.anims.generateFrameNumbers("player", { start: 5, end: 5 }),
+      frames: this.anims.generateFrameNumbers("player", { start: 0, end: 4 }),
       frameRate: 10,
       repeat: -1,
     });
@@ -350,6 +362,8 @@ class LevelTwo extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(player, this.closet, () => {}, null, this);
+
     cursors = this.input.keyboard.createCursorKeys();
   }
 
@@ -358,27 +372,41 @@ class LevelTwo extends Phaser.Scene {
       return;
     }
 
-    if (cursors.left.isDown) {
+    if (cursors.left.isDown && cursors.up.isDown) {
+      player.setVelocityX(-160);
+      player.setVelocityY(-160);
+      player.anims.play("left", true);
+    } else if (cursors.right.isDown && cursors.up.isDown) {
+      player.setVelocityX(160);
+      player.setVelocityY(-160);
+      player.anims.play("right", true);
+    } else if (cursors.left.isDown && cursors.down.isDown) {
+      player.setVelocityX(-160);
+      player.setVelocityY(160);
+      player.anims.play("left", true);
+    } else if (cursors.right.isDown && cursors.down.isDown) {
+      player.setVelocityX(160);
+      player.setVelocityY(160);
+      player.anims.play("right", true);
+    } else if (cursors.left.isDown) {
       player.setVelocityX(-160);
       player.anims.play("left", true);
     } else if (cursors.right.isDown) {
       player.setVelocityX(160);
       player.anims.play("right", true);
-    } else {
-      player.setVelocityX(0);
-      player.anims.play("turn");
-    }
-
-    // Movimiento vertical
-    if (cursors.up.isDown) {
+    } else if (cursors.up.isDown) {
       player.setVelocityY(-160);
       player.anims.play("up", true);
     } else if (cursors.down.isDown) {
       player.setVelocityY(160);
       player.anims.play("down", true);
     } else {
+      player.setVelocityX(0);
       player.setVelocityY(0);
+      player.anims.play("turn");
     }
+
+    // Movimiento vertical
   }
 }
 
@@ -396,5 +424,23 @@ const config = {
 
   scene: [LevelOne, LevelTwo], // Define las escenas como un arreglo
 };
+
+function displayModal(title, description) {
+  const $modal = document.querySelector("#modal");
+  $modal.innerHTML = "";
+  const $title = document.createElement("h1");
+  const $description = document.createElement("p");
+  const $button = document.createElement("button");
+  $button.textContent = "Cerrar";
+  $button.addEventListener("click", () => {
+    $modal.style = "display: none";
+  });
+  $title.textContent = title;
+  $description.textContent = description;
+  $modal.appendChild($title);
+  $modal.appendChild($description);
+  $modal.appendChild($button);
+  $modal.style = "display: block";
+}
 
 const game = new Phaser.Game(config);
