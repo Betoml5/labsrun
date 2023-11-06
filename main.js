@@ -69,7 +69,7 @@ class LevelOne extends Phaser.Scene {
 
     const song = this.sound.add("song");
     song.play();
-    song.setVolume(0.5);
+    song.setVolume(0.3);
 
     //Donde aparece el personaje
     player = this.physics.add.sprite(600, 350, "player");
@@ -201,6 +201,7 @@ class LevelTwo extends Phaser.Scene {
   phone;
   door;
   closet;
+  bed;
   bookFound = false;
   phoneFound = false;
 
@@ -283,7 +284,7 @@ class LevelTwo extends Phaser.Scene {
 
     const song = this.sound.add("song");
     song.play();
-    song.setVolume(0.5);
+    song.setVolume(0.3);
 
     //Donde aparece el personaje
     player = this.physics.add.sprite(100, 450, "player");
@@ -292,11 +293,13 @@ class LevelTwo extends Phaser.Scene {
     this.book = this.physics.add.staticGroup();
     this.phone = this.physics.add.staticGroup();
     this.closet = this.physics.add.staticGroup();
+    this.bed = this.physics.add.staticGroup();
     //Donde se crea la puerta [la posicion]
     this.door.create(110, 70, "door");
-    this.book.create(360, 185, "book");
+    this.book.create(235, 168, "book");
     this.phone.create(700, 400, "phone");
     this.closet.create(55, 300, "ropero");
+    this.bed.create(400, 180, "cama");
 
     // platforms.create(400, 568, "ground").setScale(2).refreshBody();
     this.physics.world.setBounds(0, 0, 800, 600); // Reemplaza 'width' y 'height' con los valores adecuados
@@ -362,6 +365,7 @@ class LevelTwo extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(player, this.bed, () => {}, null, this);
     this.physics.add.collider(player, this.closet, () => {}, null, this);
 
     cursors = this.input.keyboard.createCursorKeys();
@@ -418,7 +422,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   },
 

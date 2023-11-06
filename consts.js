@@ -62,6 +62,10 @@ export const LEVEL_TWO_IMAGES = [
     name: "ropero",
     path: "assets/ropero.png",
   },
+  {
+    name: "cama",
+    path: "assets/cama.png",
+  },
 ];
 
 export const QUESTIONS_LEVEL_ONE = [
