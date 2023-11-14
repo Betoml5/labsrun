@@ -12,6 +12,22 @@ export default class LevelThree extends Phaser.Scene {
   linterna;
   llave;
   puerta;
+  cajaFuerte;
+  todoListText;
+
+  collisionWithHacha(player, element) {
+    element.destroy();
+    this.todoListText.setText("Recoge la llave");
+  }
+
+  collisionWithLlave() {}
+
+  collisionWithLiterna() {}
+
+  collisionWithCajaFuerte(player, element) {
+    element.setTexture("cajaAbierta");
+    this.todoListText.setText("Encuentra las demas");
+  }
 
   preload() {
     LEVEL_THREE_IMAGES.forEach((image) => {
@@ -28,13 +44,13 @@ export default class LevelThree extends Phaser.Scene {
   create() {
     this.add.image(400, 300, "bg-level3");
 
-    var todoList = this.add.text(
+    this.todoListText = this.add.text(
       20,
       20,
       `
-      *Encuentra la llave para abrir la caja fuerte
-      *Recoge la linterna para poder ver en la oscuridad         
-      *Encuentra el hacha para romper la puerta
+      *Recoge la llave
+      *Recoge la linterna        
+      *Recoge el hacha
       `,
       {
         fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
@@ -50,11 +66,13 @@ export default class LevelThree extends Phaser.Scene {
     this.llave = this.physics.add.staticGroup();
     this.linterna = this.physics.add.staticGroup();
     this.hacha = this.physics.add.staticGroup();
+    this.cajaFuerte = this.physics.add.staticGroup();
 
     this.door.create(550, 70, "puerta");
     this.llave.create(300, 500, "llave");
     this.linterna.create(750, 500, "linterna");
     this.hacha.create(750, 130, "hacha");
+    this.cajaFuerte.create(350, 300, "cajaFuerte");
 
     // platforms.create(400, 568, "ground").setScale(2).refreshBody();
     this.physics.world.setBounds(0, 0, 800, 600); // Reemplaza 'width' y 'height' con los valores adecuados
@@ -95,6 +113,22 @@ export default class LevelThree extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+
+    this.physics.add.collider(
+      player,
+      this.cajaFuerte,
+      this.collisionWithCajaFuerte,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
+      this.hacha,
+      this.collisionWithHacha,
+      null,
+      this
+    );
 
     cursors = this.input.keyboard.createCursorKeys();
   }
