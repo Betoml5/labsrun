@@ -1,4 +1,5 @@
 import { LEVEL_ONE_IMAGES, LEVEL_TWO_IMAGES } from "./consts";
+import LevelThree from "./level3";
 // import { displayQuestion, generateQuestion } from "./actions";
 import "./style.css";
 import Phaser from "phaser";
@@ -265,6 +266,7 @@ class LevelTwo extends Phaser.Scene {
       "¡Excelente!",
       "¡Has encontrado la puerta y tienes los objetos para avanzar!"
     );
+    this.scene.start("levelThree");
   }
 
   preload() {
@@ -426,7 +428,7 @@ const config = {
     },
   },
 
-  scene: [LevelOne, LevelTwo], // Define las escenas como un arreglo
+  scene: [LevelThree], // Define las escenas como un arreglo
 };
 
 function displayModal(title, description) {

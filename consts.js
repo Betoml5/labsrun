@@ -68,77 +68,33 @@ export const LEVEL_TWO_IMAGES = [
   },
 ];
 
-export const QUESTIONS_LEVEL_ONE = [
+export const LEVEL_THREE_IMAGES = [
   {
-    id: 1,
-    question: "¿Cuál es la capital de Colombia?",
-    options: [
-      {
-        text: "Bogotá",
-        correct: true,
-      },
-      {
-        text: "Medellín",
-        correct: false,
-      },
-      {
-        text: "Cali",
-        correct: false,
-      },
-    ],
+    name: "bg-level3",
+    path: "assets/bg-level3.png",
   },
   {
-    id: 2,
-    question: "¿Cuál es la capital de Argentina?",
-    options: [
-      {
-        text: "Buenos Aires",
-        correct: true,
-      },
-      {
-        text: "Córdoba",
-        correct: false,
-      },
-      {
-        text: "Rosario",
-        correct: false,
-      },
-    ],
+    name: "puerta",
+    path: "assets/level-3-puerta.png",
   },
   {
-    id: 3,
-    question: "¿Cuál es la capital de Brasil?",
-    options: [
-      {
-        text: "Brasilia",
-        correct: true,
-      },
-      {
-        text: "Sao Paulo",
-        correct: false,
-      },
-      {
-        text: "Rio de Janeiro",
-        correct: false,
-      },
-    ],
+    name: "llave",
+    path: "assets/level-3-llave.png",
   },
   {
-    id: 4,
-    question: "¿Cuál es la capital de Chile?",
-    options: [
-      {
-        text: "Santiago",
-        correct: true,
-      },
-      {
-        text: "Valparaíso",
-        correct: false,
-      },
-      {
-        text: "Concepción",
-        correct: false,
-      },
-    ],
+    name: "linterna",
+    path: "assets/linterna.png",
+  },
+  {
+    name: "hacha",
+    path: "assets/hacha.png",
+  },
+  {
+    name: "cajaFuerte",
+    path: "assets/cajaCerrada.png",
+  },
+  {
+    name: "cajaAbierta",
+    path: "assets/cajaAbierta.png",
   },
 ];
