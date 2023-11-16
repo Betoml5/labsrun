@@ -428,7 +428,7 @@ const config = {
     },
   },
 
-  scene: [LevelOne, LevelTwo], // Define las escenas como un arreglo
+  scene: [LevelThree], // Define las escenas como un arreglo
 };
 
 function displayModal(title, description) {

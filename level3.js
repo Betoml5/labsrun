@@ -14,10 +14,15 @@ export default class LevelThree extends Phaser.Scene {
   puerta;
   cajaFuerte;
   todoListText;
+  numeroSecretos;
 
   collisionWithHacha(player, element) {
     element.destroy();
-    this.todoListText.setText("Recoge la llave");
+    this.todoListText.setText(`
+    *Recoge la llave
+    *Recoge la linterna        
+    *Recoge el hacha - LISTO
+    `);
   }
 
   collisionWithLlave() {}
