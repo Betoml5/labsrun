@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { LEVEL_THREE_IMAGES } from "./consts";
+import { displayModal } from "./utils";
 var player;
 var cursors;
 var gameOver = false;
@@ -16,22 +17,42 @@ export default class LevelThree extends Phaser.Scene {
   todoListText;
   numeroSecretos;
 
+  elementosEncontrados = {
+    hacha: false,
+    linterna: false,
+    llave: false,
+  };
+
   collisionWithHacha(player, element) {
     element.destroy();
-    this.todoListText.setText(`
-    *Recoge la llave
-    *Recoge la linterna        
-    *Recoge el hacha - LISTO
-    `);
+    this.add.text(500, 20, "1", { fontFamily: "Arial", fontSize: 24 });
+    this.elementosEncontrados.hacha = true;
   }
 
-  collisionWithLlave() {}
+  collisionWithLlave(player, element) {
+    element.destroy();
+    this.add.text(30, 20, "2", { fontFamily: "Arial", fontSize: 24 });
 
-  collisionWithLiterna() {}
+    this.elementosEncontrados.llave = true;
+  }
+
+  collisionWithLiterna(player, element) {
+    element.destroy();
+    this.add.text(30, 500, "3", { fontFamily: "Arial", fontSize: 24 });
+
+    this.elementosEncontrados.linterna = true;
+  }
 
   collisionWithCajaFuerte(player, element) {
-    element.setTexture("cajaAbierta");
-    this.todoListText.setText("Encuentra las demas");
+    if (
+      this.elementosEncontrados.hacha &&
+      this.elementosEncontrados.linterna &&
+      this.elementosEncontrados.llave
+    ) {
+      displayModalCode("Caja fuerte", "Ingresa el código");
+    } else {
+      displayModal("No puedes abrir la caja fuerte", "Te falta algo");
+    }
   }
 
   preload() {
@@ -48,19 +69,6 @@ export default class LevelThree extends Phaser.Scene {
 
   create() {
     this.add.image(400, 300, "bg-level3");
-
-    this.todoListText = this.add.text(
-      20,
-      20,
-      `
-      *Recoge la llave
-      *Recoge la linterna        
-      *Recoge el hacha
-      `,
-      {
-        fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      }
-    );
 
     const song = this.sound.add("song");
     song.play();
@@ -135,6 +143,22 @@ export default class LevelThree extends Phaser.Scene {
       this
     );
 
+    this.physics.add.collider(
+      player,
+      this.linterna,
+      this.collisionWithLiterna,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
+      this.llave,
+      this.collisionWithLlave,
+      null,
+      this
+    );
+
     cursors = this.input.keyboard.createCursorKeys();
   }
 
@@ -177,4 +201,43 @@ export default class LevelThree extends Phaser.Scene {
       player.anims.play("turn");
     }
   }
+}
+
+export function displayModalCode(title, description) {
+  const $modal = document.querySelector("#modal");
+  $modal.innerHTML = "";
+  const content = `
+      <div>
+        <form>
+          <label for="code">Ingresa el código</label>
+          <input type="text" id="code" name="code">
+          <input id="btnCode" type="submit" value="Enviar">
+        </form>
+      </div>
+
+  `;
+  $modal.innerHTML = content;
+  $modal.style = "display: block";
+  document.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const code = document.querySelector("#code").value;
+    if (code === "123") {
+      displayModal("Caja fuerte", "Felicidades, has ganado");
+    } else {
+      displayModal("Caja fuerte", "Código incorrecto");
+    }
+  });
+  // const $title = document.createElement("h1");
+  // const $description = document.createElement("p");
+  // const $button = document.createElement("button");
+  // $button.textContent = "Cerrar";
+  // $button.addEventListener("click", () => {
+  //   $modal.style = "display: none";
+  // });
+  // $title.textContent = title;
+  // $description.textContent = description;
+  // $modal.appendChild($title);
+  // $modal.appendChild($description);
+  // $modal.appendChild($button);
+  // $modal.style = "display: block";
 }
