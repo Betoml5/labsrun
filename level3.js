@@ -49,7 +49,11 @@ export default class LevelThree extends Phaser.Scene {
       this.elementosEncontrados.linterna &&
       this.elementosEncontrados.llave
     ) {
-      displayModalCode("Caja fuerte", "Ingresa el código");
+      displayModalCode((isCorrect) => {
+        if (isCorrect) {
+          element.setTexture("cajaAbierta");
+        }
+      });
     } else {
       displayModal("No puedes abrir la caja fuerte", "Te falta algo");
     }
@@ -203,12 +207,13 @@ export default class LevelThree extends Phaser.Scene {
   }
 }
 
-export function displayModalCode(title, description) {
+export function displayModalCode(callback) {
+  let isCorrect;
   const $modal = document.querySelector("#modal");
   $modal.innerHTML = "";
   const content = `
       <div>
-        <form>
+        <form id="form-code">
           <label for="code">Ingresa el código</label>
           <input type="text" id="code" name="code">
           <input id="btnCode" type="submit" value="Enviar">
@@ -218,26 +223,18 @@ export function displayModalCode(title, description) {
   `;
   $modal.innerHTML = content;
   $modal.style = "display: block";
-  document.addEventListener("submit", (e) => {
+
+  document.querySelector("#form-code").addEventListener("submit", (e) => {
     e.preventDefault();
     const code = document.querySelector("#code").value;
     if (code === "123") {
-      displayModal("Caja fuerte", "Felicidades, has ganado");
+      displayModal("Caja fuerte", "Felicidades, puedes continuar");
+      callback(true);
     } else {
       displayModal("Caja fuerte", "Código incorrecto");
+      callback(false);
     }
   });
-  // const $title = document.createElement("h1");
-  // const $description = document.createElement("p");
-  // const $button = document.createElement("button");
-  // $button.textContent = "Cerrar";
-  // $button.addEventListener("click", () => {
-  //   $modal.style = "display: none";
-  // });
-  // $title.textContent = title;
-  // $description.textContent = description;
-  // $modal.appendChild($title);
-  // $modal.appendChild($description);
-  // $modal.appendChild($button);
-  // $modal.style = "display: block";
+
+  return isCorrect;
 }
