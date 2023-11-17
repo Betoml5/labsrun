@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import { LEVEL_THREE_IMAGES } from "./consts";
 import { displayModal } from "./utils";
+import "./style.css";
+
 var player;
 var cursors;
 var gameOver = false;
@@ -25,7 +27,7 @@ export default class LevelThree extends Phaser.Scene {
 
   collisionWithHacha(player, element) {
     element.destroy();
-    this.add.text(500, 20, "1", { fontFamily: "Arial", fontSize: 24 });
+    this.add.text(480, 20, "1", { fontFamily: "Arial", fontSize: 24 });
     this.elementosEncontrados.hacha = true;
   }
 
@@ -216,7 +218,7 @@ export function displayModalCode(callback) {
         <form id="form-code">
           <label for="code">Ingresa el código</label>
           <input type="text" id="code" name="code">
-          <input id="btnCode" type="submit" value="Enviar">
+          <input id="btnCode" class="btn" type="submit" value="Enviar">
         </form>
       </div>
 

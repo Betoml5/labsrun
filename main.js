@@ -429,7 +429,7 @@ const config = {
     },
   },
 
-  scene: [LevelThree], // Define las escenas como un arreglo
+  scene: [LevelOne, LevelTwo, LevelThree], // Define las escenas como un arreglo
 };
 
 const game = new Phaser.Game(config);

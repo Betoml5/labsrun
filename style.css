@@ -85,3 +85,11 @@
   color: #fff;
   margin-top: 30px;
 }
+
+.btn {
+  border: none;
+  background-color: #a2785a;
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+}
