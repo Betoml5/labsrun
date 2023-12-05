@@ -1,5 +1,8 @@
 import Phaser from "phaser";
 import { LEVEL_THREE_IMAGES } from "./consts";
+import { displayModal } from "./utils";
+import "./style.css";
+
 var player;
 var cursors;
 var gameOver = false;
@@ -14,19 +17,48 @@ export default class LevelThree extends Phaser.Scene {
   puerta;
   cajaFuerte;
   todoListText;
+  numeroSecretos;
+
+  elementosEncontrados = {
+    hacha: false,
+    linterna: false,
+    llave: false,
+  };
 
   collisionWithHacha(player, element) {
     element.destroy();
-    this.todoListText.setText("Recoge la llave");
+    this.add.text(480, 20, "1", { fontFamily: "Arial", fontSize: 24 });
+    this.elementosEncontrados.hacha = true;
   }
 
-  collisionWithLlave() {}
+  collisionWithLlave(player, element) {
+    element.destroy();
+    this.add.text(30, 20, "2", { fontFamily: "Arial", fontSize: 24 });
 
-  collisionWithLiterna() {}
+    this.elementosEncontrados.llave = true;
+  }
+
+  collisionWithLiterna(player, element) {
+    element.destroy();
+    this.add.text(30, 500, "3", { fontFamily: "Arial", fontSize: 24 });
+
+    this.elementosEncontrados.linterna = true;
+  }
 
   collisionWithCajaFuerte(player, element) {
-    element.setTexture("cajaAbierta");
-    this.todoListText.setText("Encuentra las demas");
+    if (
+      this.elementosEncontrados.hacha &&
+      this.elementosEncontrados.linterna &&
+      this.elementosEncontrados.llave
+    ) {
+      displayModalCode((isCorrect) => {
+        if (isCorrect) {
+          element.setTexture("cajaAbierta");
+        }
+      });
+    } else {
+      displayModal("No puedes abrir la caja fuerte", "Te falta algo");
+    }
   }
 
   preload() {
@@ -43,19 +75,6 @@ export default class LevelThree extends Phaser.Scene {
 
   create() {
     this.add.image(400, 300, "bg-level3");
-
-    this.todoListText = this.add.text(
-      20,
-      20,
-      `
-      *Recoge la llave
-      *Recoge la linterna        
-      *Recoge el hacha
-      `,
-      {
-        fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      }
-    );
 
     const song = this.sound.add("song");
     song.play();
@@ -116,6 +135,16 @@ export default class LevelThree extends Phaser.Scene {
 
     this.physics.add.collider(
       player,
+      this.door,
+      () => {
+        //TODO cambiar por la escena del nivel 4
+      },
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
       this.cajaFuerte,
       this.collisionWithCajaFuerte,
       null,
@@ -126,6 +155,22 @@ export default class LevelThree extends Phaser.Scene {
       player,
       this.hacha,
       this.collisionWithHacha,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
+      this.linterna,
+      this.collisionWithLiterna,
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
+      this.llave,
+      this.collisionWithLlave,
       null,
       this
     );
@@ -172,4 +217,36 @@ export default class LevelThree extends Phaser.Scene {
       player.anims.play("turn");
     }
   }
+}
+
+export function displayModalCode(callback) {
+  let isCorrect;
+  const $modal = document.querySelector("#modal");
+  $modal.innerHTML = "";
+  const content = `
+      <div>
+        <form id="form-code">
+          <label for="code">Ingresa el código</label>
+          <input type="text" id="code" name="code">
+          <input id="btnCode" class="btn" type="submit" value="Enviar">
+        </form>
+      </div>
+
+  `;
+  $modal.innerHTML = content;
+  $modal.style = "display: block";
+
+  document.querySelector("#form-code").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const code = document.querySelector("#code").value;
+    if (code === "123") {
+      displayModal("Caja fuerte", "Felicidades, puedes continuar");
+      callback(true);
+    } else {
+      displayModal("Caja fuerte", "Código incorrecto");
+      callback(false);
+    }
+  });
+
+  return isCorrect;
 }
