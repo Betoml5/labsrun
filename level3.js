@@ -135,6 +135,16 @@ export default class LevelThree extends Phaser.Scene {
 
     this.physics.add.collider(
       player,
+      this.door,
+      () => {
+        //TODO cambiar por la escena del nivel 4
+      },
+      null,
+      this
+    );
+
+    this.physics.add.collider(
+      player,
       this.cajaFuerte,
       this.collisionWithCajaFuerte,
       null,
