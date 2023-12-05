@@ -4,6 +4,7 @@ import LevelThree from "./level3";
 import "./style.css";
 import Phaser from "phaser";
 import { displayModal } from "./utils";
+import LevelFour from "./level4";
 
 //Game objects
 
@@ -429,7 +430,7 @@ const config = {
     },
   },
 
-  scene: [LevelOne, LevelTwo, LevelThree], // Define las escenas como un arreglo
+  scene: [LevelOne, LevelTwo, LevelThree, LevelFour], // Define las escenas como un arreglo
 };
 
 const game = new Phaser.Game(config);

@@ -137,7 +137,7 @@ export default class LevelThree extends Phaser.Scene {
       player,
       this.door,
       () => {
-        //TODO cambiar por la escena del nivel 4
+        this.scene.start("levelFour");
       },
       null,
       this

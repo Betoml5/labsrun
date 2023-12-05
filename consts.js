@@ -98,3 +98,38 @@ export const LEVEL_THREE_IMAGES = [
     path: "assets/cajaAbierta.png",
   },
 ];
+
+export const LEVEL_FOUR_IMAGES = [
+  {
+    name: "bg-level4",
+    path: "assets/bg-level4.png",
+  },
+  {
+    name: "tijeras",
+    path: "assets/tijeras.png",
+  },
+  {
+    name: "zapato",
+    path: "assets/zapato.png",
+  },
+  {
+    name: "muroplantas",
+    path: "assets/muroplantas.png",
+  },
+  {
+    name: "moneda",
+    path: "assets/moneda.png",
+  },
+  {
+    name: "manta",
+    path: "assets/manta.png",
+  },
+  {
+    name: "canasta",
+    path: "assets/canasta.png",
+  },
+  {
+    name: "avioncito",
+    path: "assets/avioncito.png",
+  },
+];
